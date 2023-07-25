@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(255)
+  lastname      String?   @db.VarChar(255)
+  email         String    @unique
+  password      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  role          role      @default(USER)
+  orders        orders[]
+}
+
+enum role {
+  USER
+  ADMIN
+}
+
+model brands {
+    id          Int       @id @default(autoincrement())
+    name        String    @db.VarChar(255) @unique
+    picture     String    @db.VarChar(255) @unique
+    products    products[]
+}
+
+model orders {
+  id            Int        @id @default(autoincrement())
+  status        String     @default("CREATED") @db.VarChar(255)
+  created_at    DateTime   @default(now()) @db.Timestamp(0)
+  updated_at    DateTime   @default(now()) @db.Timestamp(0) @updatedAt
+  deleted_at    DateTime?  @db.Timestamp(0)  
+  userId        Int        @unique
+  user          users      @relation(fields: [userId], references: [id])
+  products      products[]
+}
+
+model products {
+  id            Int        @id @default(autoincrement())
+  name          String     @db.VarChar(255)@unique
+  description   String     @db.VarChar(255)
+  price         Float      @db.Real
+  picture       String     @db.VarChar(255) 
+  created_at    DateTime   @default(now()) @db.Timestamp(0)
+  updated_at    DateTime   @default(now()) @db.Timestamp(0) @updatedAt
+  deleted_at    DateTime?  @db.Timestamp(0)
+  available     Boolean    @default(true)
+  brandsId      Int        @unique
+  brands        brands     @relation(fields: [brandsId], references: [id])
+  orders        orders[] 
+}  
