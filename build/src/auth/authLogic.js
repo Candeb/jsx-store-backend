@@ -1,0 +1,126 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteUserByEmail = exports.getAllUsers = exports.refreshToken = exports.register = exports.login = void 0;
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const prismaClient_1 = require("../config/prismaClient");
+const config_1 = require("../config/config");
+const client_1 = require("@prisma/client");
+const db = new client_1.PrismaClient();
+const login = (email, password) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield (0, prismaClient_1.prisma)().users.findUnique({ where: { email: email } });
+        if (user === null) {
+            throw new Error('User not found');
+        }
+        const result = yield bcrypt_1.default.compare(password, user.password);
+        if (result) {
+            const accessToken = jsonwebtoken_1.default.sign({ email: email, userId: user.id }, (0, config_1.getConfig)().accesTokenSecret, {
+                expiresIn: '1h',
+            });
+            const refreshToken = jsonwebtoken_1.default.sign({ email: email }, (0, config_1.getConfig)().refreshTokenSecret, {
+                expiresIn: '72h',
+            });
+            return { accessToken: accessToken, refreshToken: refreshToken };
+        }
+        throw new Error('Invalid password');
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.login = login;
+const register = (name, email, password) => __awaiter(void 0, void 0, void 0, function* () {
+    // validar que el email no exista!
+    const hash = yield bcrypt_1.default.hash(password, 10);
+    try {
+        const user = yield (0, prismaClient_1.prisma)().users.create({
+            data: {
+                name: name,
+                email: email,
+                password: hash,
+            },
+        });
+        return user;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.register = register;
+const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = jsonwebtoken_1.default.verify(token, (0, config_1.getConfig)().refreshTokenSecret);
+        if (data) {
+            const dataparsed = data;
+            const user = yield (0, prismaClient_1.prisma)().users.findUnique({
+                where: { email: dataparsed.email },
+            });
+            if (user === null) {
+                throw new Error('USER NOT FOUND');
+            }
+            const accessToken = jsonwebtoken_1.default.sign({ email: user.email, role: user.role }, (0, config_1.getConfig)().accesTokenSecret, {
+                expiresIn: '1h',
+            });
+            const refreshToken = jsonwebtoken_1.default.sign({ email: user.email }, (0, config_1.getConfig)().refreshTokenSecret, {
+                expiresIn: '72h',
+            });
+            return { accessToken: accessToken, refreshToken: refreshToken };
+        }
+    }
+    catch (err) {
+        if (err.name === 'TokenExpiredError') {
+            throw new Error('NOT AUTHORIZED: TOKEN EXPIRED');
+        }
+        throw new Error('NOT AUTHORIZED: TOKEN NOT VALID');
+    }
+    throw new Error('NOT AUTHORIZED: TOKEN NOT VALID');
+});
+exports.refreshToken = refreshToken;
+function getAllUsers() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const allUsers = yield db.users.findMany({
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            });
+            return allUsers;
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
+    });
+}
+exports.getAllUsers = getAllUsers;
+function deleteUserByEmail(email) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield db.users.delete({
+                where: {
+                    email: email,
+                },
+            });
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
+        }
+    });
+}
+exports.deleteUserByEmail = deleteUserByEmail;

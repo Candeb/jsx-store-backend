@@ -19,7 +19,7 @@ const server = app.listen(port, () => {
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
 
-const html = `
+let template = `
 <!DOCTYPE html>
 <html>
   <head>
@@ -31,4 +31,6 @@ const html = `
     </p>
   </body>
 </html>
+
 `;
+console.log(template);
