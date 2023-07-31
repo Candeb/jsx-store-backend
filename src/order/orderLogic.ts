@@ -18,11 +18,11 @@ export const createOrder = async (
             product: {
               connect: {
                 id: productId,
-                name,
-                description,
-                price,
-                picture,
-                brandsId,
+                name: name,
+                description: description,
+                price: price,
+                picture: picture,
+                brandsId: brandsId,
               },
             },
           })),
