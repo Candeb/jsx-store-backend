@@ -7,13 +7,14 @@ import {
   login,
 } from './authLogic';
 
-export const getAllUsersController = async (res: Response) => {
+export const getAllUsersController = async (res: Response, req: Request) => {
   try {
     const result = await getAllUsers();
     console.log(result);
     res.json(result);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.status(500).send(error);
+    return;
   }
 };
 
@@ -31,8 +32,11 @@ export const registerController = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   try {
     const result = await register(name, email, password);
+    console.log('user', result);
     res.json(result);
   } catch (err) {
+    console.log('err', err);
+
     res.status(500).send(err);
     return;
   }

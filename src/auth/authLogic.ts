@@ -5,8 +5,6 @@ import { getConfig } from '../config/config';
 import { PrismaClient } from '@prisma/client';
 import { User, loginResponse } from '../config/types';
 
-const db = new PrismaClient();
-
 export const login = async (
   email: string,
   password: string
@@ -98,26 +96,19 @@ export const refreshToken = async (token: string): Promise<loginResponse> => {
   throw new Error('NOT AUTHORIZED: TOKEN NOT VALID');
 };
 
-export async function getAllUsers(): Promise<User[]> {
+export const getAllUsers = async () => {
   try {
-    const allUsers = await db.users.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
-    });
-
-    return allUsers;
-  } catch (error) {
-    console.log(error);
-    throw error;
+    const users = await prisma().users.findMany();
+    return users;
+  } catch (err) {
+    console.log(err);
+    throw err;
   }
-}
+};
 
 export async function deleteUserByEmail(email: string) {
   try {
-    await db.users.delete({
+    await prisma().users.delete({
       where: {
         email: email,
       },

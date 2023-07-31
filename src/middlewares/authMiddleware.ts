@@ -24,13 +24,9 @@ export const authMiddleware = async (
     }
   } catch (err: any) {
     if (err.name === 'TokenExpiredError') {
-      res.status(401).json({ message: 'NOT AUTHORIZED: TOKEN EXPIRED' });
-      return;
+      res.status(401).json('No autorizado: el token expiró');
     }
-    res.status(401).json({ message: 'NOT AUTHORIZED: TOKEN NOT VALID' });
-    return;
+    res.status(401).json('No autorizado: el token no es valido');
   }
-
-  res.status(401).json({ message: 'NOT AUTHORIZED: TOKEN NOT VALID' });
-  return;
+  res.status(401).json('No autorizado: el token no es valido');
 };

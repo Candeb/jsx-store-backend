@@ -10,6 +10,7 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(0),
     "role" "role" NOT NULL DEFAULT 'USER',
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
@@ -37,6 +38,17 @@ CREATE TABLE "orders" (
 );
 
 -- CreateTable
+CREATE TABLE "orderDetail" (
+    "id" SERIAL NOT NULL,
+    "orderId" INTEGER NOT NULL,
+    "productId" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP(0),
+
+    CONSTRAINT "orderDetail_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "products" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
@@ -52,12 +64,6 @@ CREATE TABLE "products" (
     CONSTRAINT "products_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "_ordersToproducts" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -68,28 +74,25 @@ CREATE UNIQUE INDEX "brands_name_key" ON "brands"("name");
 CREATE UNIQUE INDEX "brands_picture_key" ON "brands"("picture");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "orders_userId_key" ON "orders"("userId");
+CREATE INDEX "orders_userId_idx" ON "orders"("userId");
+
+-- CreateIndex
+CREATE INDEX "orderDetail_productId_orderId_idx" ON "orderDetail"("productId", "orderId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "products_name_key" ON "products"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "products_brandsId_key" ON "products"("brandsId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_ordersToproducts_AB_unique" ON "_ordersToproducts"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_ordersToproducts_B_index" ON "_ordersToproducts"("B");
+CREATE INDEX "products_brandsId_idx" ON "products"("brandsId");
 
 -- AddForeignKey
 ALTER TABLE "orders" ADD CONSTRAINT "orders_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "orderDetail" ADD CONSTRAINT "orderDetail_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "orders"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orderDetail" ADD CONSTRAINT "orderDetail_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "products" ADD CONSTRAINT "products_brandsId_fkey" FOREIGN KEY ("brandsId") REFERENCES "brands"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_ordersToproducts" ADD CONSTRAINT "_ordersToproducts_A_fkey" FOREIGN KEY ("A") REFERENCES "orders"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_ordersToproducts" ADD CONSTRAINT "_ordersToproducts_B_fkey" FOREIGN KEY ("B") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
