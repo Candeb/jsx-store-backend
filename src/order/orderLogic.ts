@@ -1,6 +1,14 @@
 import { prisma } from '../config/prismaClient';
 
-export const createOrder = async (userId: number, productsIds: number[]) => {
+export const createOrder = async (
+  userId: number,
+  productsIds: number[],
+  name: string,
+  description: string,
+  price: number,
+  picture: string,
+  brandsId: number
+) => {
   try {
     const orderCreated = await prisma().orders.create({
       data: {
@@ -10,6 +18,11 @@ export const createOrder = async (userId: number, productsIds: number[]) => {
             product: {
               connect: {
                 id: productId,
+                name,
+                description,
+                price,
+                picture,
+                brandsId,
               },
             },
           })),
