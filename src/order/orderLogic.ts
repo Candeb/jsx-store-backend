@@ -2,22 +2,22 @@ import { prisma } from '../config/prismaClient';
 
 export const createOrder = async (userId: number, productsIds: number[]) => {
   try {
-    const orderCreated = await prisma().orders.create({
+    const newOrder = await prisma().orders.create({
       data: {
         userId: userId,
-        products: {
-          create: productsIds.map((productId) => ({
-            product: {
-              connect: {
-                id: productId,
-              },
-            },
-          })),
-        },
       },
     });
-    return orderCreated;
+
+    const orderDetails = await prisma().orderDetail.createMany({
+      data: productsIds.map((productId) => ({
+        orderId: newOrder.id,
+        productId: productId,
+      })),
+    });
+
+    return newOrder;
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };
