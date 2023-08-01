@@ -5,19 +5,19 @@ export const createOrder = async (userId: number, productsIds: number[]) => {
     const orderCreated = await prisma().orders.create({
       data: {
         userId: userId,
+        products: {
+          create: productsIds.map((productId) => ({
+            product: {
+              connect: {
+                id: productId,
+              },
+            },
+          })),
+        },
       },
     });
-
-    const productsOnOrdersCreated = await prisma().orderDetail.createMany({
-      data: productsIds.map((productId) => ({
-        orderId: orderCreated.id,
-        productId: productId,
-      })),
-    });
-
     return orderCreated;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
