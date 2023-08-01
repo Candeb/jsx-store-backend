@@ -1,36 +1,45 @@
 import { prisma } from '../config/prismaClient';
 
-export const createOrder = async (
-  userId: number,
-  productsIds: number[],
-  name: string,
-  description: string,
-  price: number,
-  picture: string,
-  brandsId: number
-) => {
+// export const createOrder = async (userId: number, productsIds: number[]) => {
+//   try {
+//     const orderCreated = await prisma().orders.create({
+//       data: {
+//         userId: userId,
+//         products: {
+//           create: productsIds.map((productId) => ({
+//             product: {
+//               connect: {
+//                 id: productId,
+//               },
+//             },
+//           })),
+//         },
+//       },
+//     });
+//     return orderCreated;
+//   } catch (err) {
+//     throw err;
+//   }
+// };
+
+export const createOrder = async (userId: number, productsIds: number[]) => {
   try {
     const orderCreated = await prisma().orders.create({
       data: {
         userId: userId,
-        products: {
-          create: productsIds.map((productId) => ({
-            product: {
-              connect: {
-                id: productId,
-                name: name,
-                description: description,
-                price: price,
-                picture: picture,
-                brandsId: brandsId,
-              },
-            },
-          })),
-        },
       },
     });
+
+    const productsOnOrdersCreated = await prisma().orderDetail.createMany({
+      data: productsIds.map((productId) => ({
+        orderId: orderCreated.id,
+        productId: productId,
+      })),
+    });
+
     return orderCreated;
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };
