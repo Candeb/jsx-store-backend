@@ -1,27 +1,5 @@
 import { prisma } from '../config/prismaClient';
 
-// export const createOrder = async (userId: number, productsIds: number[]) => {
-//   try {
-//     const orderCreated = await prisma().orders.create({
-//       data: {
-//         userId: userId,
-//         products: {
-//           create: productsIds.map((productId) => ({
-//             product: {
-//               connect: {
-//                 id: productId,
-//               },
-//             },
-//           })),
-//         },
-//       },
-//     });
-//     return orderCreated;
-//   } catch (err) {
-//     throw err;
-//   }
-// };
-
 export const createOrder = async (userId: number, productsIds: number[]) => {
   try {
     const orderCreated = await prisma().orders.create({
