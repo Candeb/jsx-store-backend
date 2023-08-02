@@ -5,7 +5,8 @@ export const createProduct = async (
   description: string,
   picture: string,
   price: number,
-  brandsId: number
+  brandsId: number,
+  available: boolean
 ) => {
   try {
     const newProduct = await prisma().products.create({
@@ -15,6 +16,7 @@ export const createProduct = async (
         picture: picture,
         price: price,
         brandsId: brandsId,
+        available: available,
       },
     });
     return newProduct;
@@ -58,7 +60,8 @@ export const updateProduct = async (
   description: string,
   picture: string,
   price: number,
-  brandsId: number
+  brandsId: number,
+  available: boolean
 ) => {
   try {
     const productUpdated = await prisma().products.update({
@@ -71,6 +74,7 @@ export const updateProduct = async (
         picture: picture,
         price: price,
         brandsId: brandsId,
+        available: available,
       },
     });
     return productUpdated;
@@ -92,47 +96,3 @@ export const deleteProductById = async (id: number) => {
     throw err;
   }
 };
-
-export async function getProductsByBrandId(id: number) {
-  try {
-    const productsByBrandId = await prisma().brands.findMany({
-      where: {
-        id: id,
-      },
-      select: {
-        products: {
-          select: {
-            name: true,
-            description: true,
-          },
-        },
-      },
-    });
-    return productsByBrandId;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
-export async function getProductsByBrandName(name: string) {
-  try {
-    const productsByBrandName = await prisma().brands.findMany({
-      where: {
-        name: name,
-      },
-      select: {
-        products: {
-          select: {
-            name: true,
-            description: true,
-          },
-        },
-      },
-    });
-    return productsByBrandName;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}

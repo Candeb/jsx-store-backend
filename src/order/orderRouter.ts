@@ -1,14 +1,44 @@
 import { Router } from 'express';
 import * as controllers from '../order/orderController';
+import { authMiddleware } from '../middlewares/authMiddleware';
+import { authAdminMiddleware } from '../middlewares/authAdminMiddleware';
 
 export const orderRouter = Router();
 
-orderRouter.get('/orders', controllers.getAllOrdersController);
-orderRouter.get('/user/:id', controllers.getAllOrdersByUserIdController);
+orderRouter.use(authMiddleware);
+
+// logueados
+orderRouter.post('/new', authMiddleware, controllers.createOrderController);
 orderRouter.get(
-  '/active/user/:id',
+  '/active/user',
+  authMiddleware,
   controllers.getActiveOrdersByUserIdController
 );
-orderRouter.get('/:id', controllers.getOrderByIdController);
-orderRouter.post('/new', controllers.createOrderController);
-orderRouter.delete('/delete/:id', controllers.deleteOrderByIdController);
+
+// ADMIN
+orderRouter.get(
+  '/orders',
+  authMiddleware,
+  authAdminMiddleware,
+  controllers.getAllOrdersController
+);
+orderRouter.get(
+  '/user/:id',
+  authMiddleware,
+  authAdminMiddleware,
+  authMiddleware,
+  authAdminMiddleware,
+  controllers.getAllOrdersByUserIdController
+);
+orderRouter.get(
+  '/:id',
+  authMiddleware,
+  authAdminMiddleware,
+  controllers.getOrderByIdController
+);
+orderRouter.delete(
+  '/delete/:id',
+  authMiddleware,
+  authAdminMiddleware,
+  controllers.deleteOrderByIdController
+);

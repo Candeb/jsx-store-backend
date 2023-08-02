@@ -2,12 +2,12 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../config/prismaClient';
 import { getConfig } from '../config/config';
-import { PrismaClient } from '@prisma/client';
-import { User, loginResponse } from '../config/types';
+import { loginResponse } from '../config/types';
 
 export const login = async (
   email: string,
-  password: string
+  password: string,
+  role: any
 ): Promise<loginResponse> => {
   try {
     const user = await prisma().users.findUnique({ where: { email: email } });
@@ -15,9 +15,10 @@ export const login = async (
       throw new Error('User not found');
     }
     const result = await bcrypt.compare(password, user.password);
+
     if (result) {
       const accessToken = jwt.sign(
-        { email: email, userId: user.id },
+        { email: email, userId: user.id, role: user.role },
         getConfig().accesTokenSecret,
         {
           expiresIn: '1h',
@@ -40,8 +41,10 @@ export const login = async (
 
 export const register = async (
   name: string,
+  lastname: string,
   email: string,
-  password: string
+  password: string,
+  role: any
 ): Promise<any> => {
   // validar que el email no exista!
   const hash = await bcrypt.hash(password, 10);
@@ -49,8 +52,10 @@ export const register = async (
     const user = await prisma().users.create({
       data: {
         name: name,
+        lastname: lastname,
         email: email,
         password: hash,
+        role: role,
       },
     });
     return user;
@@ -106,11 +111,38 @@ export const getAllUsers = async () => {
   }
 };
 
+export const getUserById = async (id: number) => {
+  try {
+    const user = await prisma().users.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    return user;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
 export async function deleteUserByEmail(email: string) {
   try {
     await prisma().users.delete({
       where: {
         email: email,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteUserByUserId(id: number) {
+  try {
+    await prisma().users.delete({
+      where: {
+        id: id,
       },
     });
   } catch (error) {

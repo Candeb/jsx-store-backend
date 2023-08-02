@@ -19,8 +19,8 @@ export const getAllOrdersController = async (req: Request, res: Response) => {
 };
 
 export const createOrderController = async (req: Request, res: Response) => {
-  const { productsIds, userId } = req.body;
-
+  const { productsIds } = req.body;
+  const userId = res.locals.userId;
   try {
     const result = await createOrder(userId, productsIds);
     res.json(result);
@@ -73,14 +73,14 @@ export const getActiveOrdersByUserIdController = async (
   res: Response
 ) => {
   try {
-    const id = req.params.id;
-    const result = await getActiveOrdersByUserId(+id);
+    const userId = res.locals.userId;
+    const result = await getActiveOrdersByUserId(+userId);
     if (result) {
       res.json(result);
       return;
     }
     res.status(404).json({
-      message: `El usuario con el id ${id} no registra órdenes activas.`,
+      message: `El usuario con el id ${userId} no registra órdenes activas.`,
     });
     return;
   } catch (error: any) {

@@ -5,9 +5,12 @@ import {
   refreshToken,
   register,
   login,
+  deleteUserByUserId,
+  getUserById,
 } from './authLogic';
+import { role } from '@prisma/client';
 
-export const getAllUsersController = async (res: Response, req: Request) => {
+export const getAllUsersController = async (req: Request, res: Response) => {
   try {
     const result = await getAllUsers();
     console.log(result);
@@ -18,7 +21,27 @@ export const getAllUsersController = async (res: Response, req: Request) => {
   }
 };
 
-export const deleteUserController = async (req: Request, res: Response) => {
+export const getUserByIdController = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const result = await getUserById(+id);
+    if (result) {
+      res.json(result);
+      return;
+    }
+    res.status(404).json({
+      message: `El usuario con el id ${id} no puede mostrarse porque no existe.`,
+    });
+    return;
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteUserByEmailController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { email } = req.params;
     await deleteUserByEmail(email);
@@ -28,10 +51,23 @@ export const deleteUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const registerController = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+export const deleteUserByUserIdController = async (
+  req: Request,
+  res: Response
+) => {
   try {
-    const result = await register(name, email, password);
+    const { id } = req.params;
+    await deleteUserByUserId(+id);
+    res.send('Usuario eliminado con éxito');
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const registerController = async (req: Request, res: Response) => {
+  const { name, lastname, email, password, role } = req.body;
+  try {
+    const result = await register(name, lastname, email, password, role);
     console.log('user', result);
     res.json(result);
   } catch (err) {
@@ -43,16 +79,17 @@ export const registerController = async (req: Request, res: Response) => {
 };
 
 export const loginController = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   try {
-    const result = await login(email, password);
+    const result = await login(email, password, role);
     res.json(result);
   } catch (err) {
     res.status(500).send(err);
     return;
   }
 };
+
 export const refreshController = async (req: Request, res: Response) => {
   const header = req.headers.authorization;
   if (!header) {

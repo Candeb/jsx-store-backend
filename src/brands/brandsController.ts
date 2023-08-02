@@ -1,5 +1,11 @@
 import { Request, Response } from 'express';
-import { createBrand, getBrandById, getBrands } from './brandsLogic';
+import {
+  createBrand,
+  getBrandById,
+  getBrands,
+  getProductsByBrandId,
+  getProductsByBrandName,
+} from './brandsLogic';
 
 export const createBrandsController = async (req: Request, res: Response) => {
   const { name, picture } = req.body;
@@ -26,14 +32,63 @@ export const getBrandsController = async (req: Request, res: Response) => {
 export const getBrandByIdController = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const idNumber = parseInt(id);
-    const result = await getBrandById(idNumber);
+    const result = await getBrandById(+id);
     if (result) {
       res.json(result);
       return;
     }
-    res.status(404).json({ message: `Brand: ${id} not found` });
+    res
+      .status(404)
+      .json({
+        message: `La marca con el id ${id} no puede mostrarse porque no existe`,
+      });
     return;
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getProductsByBrandIdController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const id = req.params.id;
+    const result = await getProductsByBrandId(+id);
+    if (!result.length) {
+      res.status(404).json({
+        message: `No se encontraron productos del id de la marca ${id}.`,
+      });
+    } else if (result) {
+      res.json(result);
+      return;
+    }
+
+    console.log(result);
+    res.send(result);
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getProductsByBrandNameController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { name } = req.params;
+    const result = await getProductsByBrandName(name.toLowerCase().trim());
+
+    if (!result.length) {
+      res.status(404).json({
+        message: `No se encontraron productos de la marca ${name}.`,
+      });
+    } else if (result) {
+      res.json(result);
+      return;
+    }
+    res.send(result);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

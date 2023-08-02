@@ -10,7 +10,7 @@ export const authMiddleware = async (
 ) => {
   const header = req.headers.authorization;
   if (!header) {
-    res.status(401).json({ message: 'NOT AUTHORIZED: TOKEN NOT PRESENT' });
+    res.status(401).json({ message: 'No autorizado: no se encontró el token' });
     return;
   }
   const token = header.split(' ')[1];

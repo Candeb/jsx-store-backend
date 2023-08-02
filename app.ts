@@ -6,7 +6,7 @@ import { productRouter } from './src/product/productRouter';
 import { brandsRouter } from './src/brands/brandsRouter';
 import { orderRouter } from './src/order/orderRouter';
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 const app = express();
 
 app.use(express.json());
