@@ -4,6 +4,7 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 import { authAdminMiddleware } from '../middlewares/authAdminMiddleware';
 
 export const brandsRouter = Router();
+brandsRouter.put('/update/:id', controllers.updateBrandController);
 
 // libre
 brandsRouter.get(
@@ -29,4 +30,3 @@ brandsRouter.post(
   authAdminMiddleware,
   controllers.createBrandsController
 );
-brandsRouter.put('/update/:id', controllers.updateBrandController);
