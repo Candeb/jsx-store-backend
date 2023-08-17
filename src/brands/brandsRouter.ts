@@ -29,3 +29,4 @@ brandsRouter.post(
   authAdminMiddleware,
   controllers.createBrandsController
 );
+brandsRouter.put('/update/:id', controllers.updateBrandController);

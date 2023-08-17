@@ -82,3 +82,25 @@ export async function getProductsByBrandName(name: string) {
     throw error;
   }
 }
+
+export const updateBrand = async (
+  id: number,
+  name: string,
+  picture: string,
+) => {
+  try {
+    const brandUpdated = await prisma().brands.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: name,
+        picture: picture,
+      },
+    });
+    return brandUpdated;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
