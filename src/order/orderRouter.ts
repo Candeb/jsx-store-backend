@@ -18,27 +18,25 @@ orderRouter.get(
 // ADMIN
 orderRouter.get(
   '/orders',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.getAllOrdersController
 );
 orderRouter.get(
   '/user/:id',
-  authMiddleware,
-  authAdminMiddleware,
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.getAllOrdersByUserIdController
 );
 orderRouter.get(
   '/:id',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.getOrderByIdController
 );
 orderRouter.delete(
   '/delete/:id',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.deleteOrderByIdController
 );

@@ -20,13 +20,13 @@ brandsRouter.get('/brands', controllers.getBrandsController);
 // ADMIN
 brandsRouter.get(
   '/:id',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.getBrandByIdController
 );
 brandsRouter.post(
   '/new',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.createBrandsController
 );

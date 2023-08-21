@@ -24,26 +24,26 @@ authRouter.post('/refresh', authMiddleware, controllers.refreshController);
 // ADMIN
 authRouter.get(
   '/users',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.getAllUsersController
 );
 
 authRouter.get(
   '/user/id/:id',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.getUserByIdController
 );
 authRouter.delete(
   '/delete/email/:email',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.deleteUserByEmailController
 );
 authRouter.delete(
   '/delete/id/:id',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.deleteUserByUserIdController
 );

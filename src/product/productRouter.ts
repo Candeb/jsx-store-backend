@@ -12,19 +12,19 @@ productRouter.get('/:id', controllers.getProductByIdController);
 // ADMIN
 productRouter.post(
   '/new',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.createProductController
 );
 productRouter.put(
   '/update/:id',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.updateProductController
 );
 productRouter.delete(
   '/delete/:id',
-  authMiddleware,
-  authAdminMiddleware,
+  // authMiddleware,
+  // authAdminMiddleware,
   controllers.deleteProductByIdController
 );
