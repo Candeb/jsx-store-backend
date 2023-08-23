@@ -86,7 +86,7 @@ export async function getProductsByBrandName(name: string) {
 export const updateBrand = async (
   id: number,
   name: string,
-  picture: string,
+  picture: string
 ) => {
   try {
     const brandUpdated = await prisma().brands.update({
@@ -104,3 +104,16 @@ export const updateBrand = async (
     throw err;
   }
 };
+
+export async function deleteBrandById(id: number) {
+  try {
+    await prisma().brands.delete({
+      where: {
+        id: id,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

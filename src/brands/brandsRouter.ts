@@ -5,6 +5,7 @@ import { authAdminMiddleware } from '../middlewares/authAdminMiddleware';
 
 export const brandsRouter = Router();
 brandsRouter.put('/update/:id', controllers.updateBrandController);
+brandsRouter.delete('/delete/:id', controllers.deleteBrandByIdController);
 
 // libre
 brandsRouter.get(

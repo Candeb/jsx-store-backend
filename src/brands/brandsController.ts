@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import {
   createBrand,
+  deleteBrandById,
   getBrandById,
   getBrands,
   getProductsByBrandId,
@@ -106,6 +107,19 @@ export const updateBrandController = async (req: Request, res: Response) => {
       message: `La marca con el id ${id} no se puede actualizar porque no existe.`,
     });
     return;
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteBrandByIdController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+    await deleteBrandById(+id);
+    res.send('Marca eliminada con éxito');
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
