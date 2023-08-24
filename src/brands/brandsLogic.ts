@@ -17,11 +17,7 @@ export const createBrand = async (name: string, picture: string) => {
 
 export const getBrands = async () => {
   try {
-    const brands = await prisma().brands.findMany({
-      where: {
-        deleted_at: null,
-      },
-    });
+    const brands = await prisma().brands.findMany({});
     return brands;
   } catch (err) {
     console.log(err);
