@@ -7,7 +7,7 @@ import {
   getProductsByBrandId,
   getProductsByBrandName,
   updateBrand,
-  getActiveBrands,
+  // getActiveBrands,
 } from './brandsLogic';
 
 export const createBrandsController = async (req: Request, res: Response) => {
@@ -31,18 +31,19 @@ export const getAllBrandsController = async (req: Request, res: Response) => {
     return;
   }
 };
-export const getActiveBrandsController = async (
-  req: Request,
-  res: Response
-) => {
-  try {
-    const brands = await getActiveBrands();
-    res.json(brands);
-  } catch (err) {
-    res.status(500).send(err);
-    return;
-  }
-};
+
+// export const getActiveBrandsController = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   try {
+//     const brands = await getActiveBrands();
+//     res.json(brands);
+//   } catch (err) {
+//     res.status(500).send(err);
+//     return;
+//   }
+// };
 
 export const getBrandByIdController = async (req: Request, res: Response) => {
   try {
