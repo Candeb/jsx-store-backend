@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,70 +8,71 @@ datasource db {
 }
 
 model users {
-  id            Int       @id @default(autoincrement())
-  name          String    @db.VarChar(255)
-  lastname      String?   @db.VarChar(255)
-  email         String    @unique
-  password      String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deleted_at    DateTime? @db.Timestamp(0)  
-  role          role      @default(USER)
-  orders        orders[]
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  lastname   String?   @db.VarChar(255)
+  email      String    @unique
+  password   String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deleted_at DateTime? @db.Timestamp(0)
+  role       role      @default(USER)
+  orders     orders[]
+}
+
+model brands {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique @db.VarChar(255)
+  picture    String     @unique @db.VarChar(255)
+  created_at DateTime   @default(now()) @db.Timestamp(0)
+  updated_at DateTime   @default(now()) @updatedAt @db.Timestamp(0)
+  deleted_at DateTime?  @db.Timestamp(0)
+  products   products[]
+}
+
+model orders {
+  id         Int           @id @default(autoincrement())
+  status     String        @default("CREATED") @db.VarChar(255)
+  created_at DateTime      @default(now()) @db.Timestamp(0)
+  updated_at DateTime      @default(now()) @updatedAt @db.Timestamp(0)
+  deleted_at DateTime?     @db.Timestamp(0)
+  userId     Int
+  products   orderDetail[]
+  user       users         @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model orderDetail {
+  id         Int       @id @default(autoincrement())
+  orderId    Int
+  productId  Int
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  deleted_at DateTime? @db.Timestamp(0)
+  orders     orders    @relation(fields: [orderId], references: [id])
+  product    products  @relation(fields: [productId], references: [id])
+
+  @@index([productId, orderId])
+}
+
+model products {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique @db.VarChar(255)
+  description String        @db.VarChar(255)
+  price       Float         @db.Real
+  picture     String        @db.VarChar(255)
+  created_at  DateTime      @default(now()) @db.Timestamp(0)
+  updated_at  DateTime      @default(now()) @updatedAt @db.Timestamp(0)
+  deleted_at  DateTime?     @db.Timestamp(0)
+  available   Boolean       @default(true)
+  brandsId    Int
+  orders      orderDetail[]
+  brands      brands        @relation(fields: [brandsId], references: [id])
+
+  @@index([brandsId])
 }
 
 enum role {
   USER
   ADMIN
 }
-
-model brands {
-  id          Int          @id @default(autoincrement())
-  name        String       @db.VarChar(255) @unique
-  picture     String       @db.VarChar(255) @unique
-  created_at  DateTime     @default(now()) @db.Timestamp(0)
-  updated_at  DateTime     @default(now()) @db.Timestamp(0) @updatedAt
-  deleted_at  DateTime?    @db.Timestamp(0)  
-  products    products[]
-}
-
-model orders {
-  id            Int        @id @default(autoincrement())
-  status        String     @default("CREATED") @db.VarChar(255)
-  created_at    DateTime   @default(now()) @db.Timestamp(0)
-  updated_at    DateTime   @default(now()) @db.Timestamp(0) @updatedAt
-  deleted_at    DateTime?  @db.Timestamp(0)  
-  userId        Int        
-  user          users      @relation(fields: [userId], references: [id])
-  products      orderDetail[]
-  @@index(fields: [userId])
-
-}
-
-model orderDetail {
-  id          Int          @id @default(autoincrement())
-  orders      orders       @relation(fields: [orderId], references: [id])     
-  orderId     Int      
-  product     products     @relation(fields: [productId], references: [id])
-  productId   Int         
-  created_at  DateTime     @default(now()) @db.Timestamp(0)
-  deleted_at  DateTime?    @db.Timestamp(0)
-  @@index(fields: [productId, orderId])
-}
-
-model products {
-  id            Int        @id @default(autoincrement())
-  name          String     @db.VarChar(255)@unique
-  description   String     @db.VarChar(255)
-  price         Float      @db.Real
-  picture       String     @db.VarChar(255) 
-  created_at    DateTime   @default(now()) @db.Timestamp(0)
-  updated_at    DateTime   @default(now()) @db.Timestamp(0) @updatedAt
-  deleted_at    DateTime?  @db.Timestamp(0)
-  available     Boolean    @default(true)
-  brandsId      Int        
-  brands        brands     @relation(fields: [brandsId], references: [id])
-  orders        orderDetail[]
-  @@index(fields: [brandsId])
-
-}  
