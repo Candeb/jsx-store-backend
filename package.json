@@ -8,10 +8,10 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "npm i && tsc && next build",
+    "build": "npm i && tsc && node build",
     "start": "node build/app.js",
     "dev": "ts-node-dev app.ts",
-    "vercel-build": "prisma generate && prisma db push && next build",
+    "vercel-build": "prisma generate && prisma db push && node build",
     "prisma:generate": "prisma generate"
   },
   "dependencies": {
