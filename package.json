@@ -9,11 +9,9 @@
   "private": false,
   "scripts": {
     "build": "npm i && tsc && node build",
-    "build": "npm i && tsc",
     "start": "node build/app.js",
-    "dev": "ts-node-dev app.ts",
     "vercel-build": "prisma generate && prisma db push && node build",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
     "dev": "ts-node-dev app.ts"
   },
   "dependencies": {
