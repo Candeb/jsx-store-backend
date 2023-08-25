@@ -17,7 +17,7 @@ brandsRouter.get(
   controllers.getProductsByBrandNameController
 );
 brandsRouter.get('/allbrands', controllers.getAllBrandsController);
-brandsRouter.get('/brands/actives', controllers.getActiveBrandsController);
+brandsRouter.get('/brands/active', controllers.getActiveBrandsController);
 
 // ADMIN
 brandsRouter.get(
