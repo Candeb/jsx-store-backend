@@ -25,19 +25,19 @@ export const getAllBrands = async () => {
   }
 };
 
-export const getActiveBrands = async () => {
-  try {
-    const brands = await prisma().brands.findMany({
-      where: {
-        deleted_at: null,
-      },
-    });
-    return brands;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-};
+// export const getActiveBrands = async () => {
+//   try {
+//     const brands = await prisma().brands.findMany({
+//       where: {
+//         deleted_at: null,
+//       },
+//     });
+//     return brands;
+//   } catch (err) {
+//     console.log(err);
+//     throw err;
+//   }
+// };
 
 export const getBrandById = async (id: number) => {
   try {
