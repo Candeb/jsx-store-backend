@@ -24,6 +24,7 @@ export const createOrderController = async (req: Request, res: Response) => {
   try {
     const result = await createOrder(userId, productsIds);
     res.json(result);
+    console.log(result);
     return;
   } catch (err) {
     res.status(500).send(err);

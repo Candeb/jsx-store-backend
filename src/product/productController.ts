@@ -18,7 +18,7 @@ export const createProductController = async (req: Request, res: Response) => {
       brandsId,
       available
     );
-    console.log(result);
+    console.log('reqbody-->', req.body);
     res.json(result);
     return;
   } catch (err) {

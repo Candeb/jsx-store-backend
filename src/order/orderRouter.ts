@@ -5,7 +5,7 @@ import { authAdminMiddleware } from '../middlewares/authAdminMiddleware';
 
 export const orderRouter = Router();
 
-orderRouter.use(authMiddleware);
+// orderRouter.use(authMiddleware);
 
 // logueados
 orderRouter.post('/new', authMiddleware, controllers.createOrderController);
