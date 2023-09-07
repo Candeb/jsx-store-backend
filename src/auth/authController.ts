@@ -8,7 +8,6 @@ import {
   deleteUserByUserId,
   getUserById,
 } from './authLogic';
-import { role } from '@prisma/client';
 
 export const getAllUsersController = async (req: Request, res: Response) => {
   try {

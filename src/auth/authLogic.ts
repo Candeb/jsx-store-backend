@@ -31,7 +31,14 @@ export const login = async (
           expiresIn: '72h',
         }
       );
-      return { accessToken: accessToken, refreshToken: refreshToken };
+      return {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        id: user.id,
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+      };
     }
     throw new Error('Invalid password');
   } catch (err) {
@@ -90,7 +97,14 @@ export const refreshToken = async (token: string): Promise<loginResponse> => {
           expiresIn: '72h',
         }
       );
-      return { accessToken: accessToken, refreshToken: refreshToken };
+      return {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        id: user.id,
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+      };
     }
   } catch (err: any) {
     if (err.name === 'TokenExpiredError') {

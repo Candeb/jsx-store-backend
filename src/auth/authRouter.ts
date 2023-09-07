@@ -29,12 +29,7 @@ authRouter.get(
   controllers.getAllUsersController
 );
 
-authRouter.get(
-  '/user/id/:id',
-  // authMiddleware,
-  // authAdminMiddleware,
-  controllers.getUserByIdController
-);
+authRouter.get('/user/id', authMiddleware, controllers.getUserByIdController);
 authRouter.delete(
   '/delete/email/:email',
   // authMiddleware,
