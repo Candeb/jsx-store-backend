@@ -164,3 +164,27 @@ export async function deleteUserByUserId(id: number) {
     throw error;
   }
 }
+
+export const updateUser = async (
+  id: number,
+  name: string,
+  lastname: string,
+  email: string
+) => {
+  try {
+    const userUpdated = await prisma().users.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: name,
+        lastname: lastname,
+        email: email,
+      },
+    });
+    return userUpdated;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

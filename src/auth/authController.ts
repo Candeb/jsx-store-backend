@@ -7,6 +7,7 @@ import {
   login,
   deleteUserByUserId,
   getUserById,
+  updateUser,
 } from './authLogic';
 
 export const getAllUsersController = async (req: Request, res: Response) => {
@@ -108,5 +109,23 @@ export const refreshController = async (req: Request, res: Response) => {
       .status(500)
       .json({ message: 'No autorizado: el token no está presente' });
     return;
+  }
+};
+
+export const updateUserController = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const { name, lastname, email } = req.body;
+    const result = await updateUser(+id, name, lastname, email);
+    if (result) {
+      res.json(result);
+      return;
+    }
+    res.status(404).json({
+      message: `El usuario con el id ${id} no se puede actualizar porque no existe.`,
+    });
+    return;
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };

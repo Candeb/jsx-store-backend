@@ -21,6 +21,8 @@ authRouter.post(
 
 authRouter.post('/refresh', authMiddleware, controllers.refreshController);
 
+authRouter.put('/update/:id', controllers.updateUserController);
+
 // ADMIN
 authRouter.get(
   '/users',
