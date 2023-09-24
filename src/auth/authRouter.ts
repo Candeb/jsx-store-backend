@@ -23,6 +23,12 @@ authRouter.post('/refresh', authMiddleware, controllers.refreshController);
 
 authRouter.put('/update/:id', controllers.updateUserController);
 
+authRouter.get(
+  '/user/id/:id',
+  authMiddleware,
+  controllers.getUserByIdController
+);
+
 // ADMIN
 authRouter.get(
   '/users',
@@ -31,7 +37,6 @@ authRouter.get(
   controllers.getAllUsersController
 );
 
-authRouter.get('/user/id', authMiddleware, controllers.getUserByIdController);
 authRouter.delete(
   '/delete/email/:email',
   // authMiddleware,
