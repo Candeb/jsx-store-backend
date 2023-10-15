@@ -8,7 +8,9 @@ import {
   deleteUserByUserId,
   getUserById,
   updateUser,
+  forgotPassword,
 } from './authLogic';
+import { prisma } from '../config/prismaClient';
 
 export const getAllUsersController = async (req: Request, res: Response) => {
   try {
@@ -125,6 +127,46 @@ export const updateUserController = async (req: Request, res: Response) => {
       message: `El usuario con el id ${id} no se puede actualizar porque no existe.`,
     });
     return;
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const forgotPasswordController = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    // Verifica si el usuario existe en la base de datos
+    const existingUser = await prisma().users.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!existingUser) {
+      // Si no se encuentra un usuario con el email proporcionado, responde con un error 404
+      res.status(404).json({
+        message: `El email ${email} no está registrado.`,
+      });
+      return;
+    }
+
+    // Si el usuario existe, procede a actualizar la contraseña
+    const passwordUpdated = await forgotPassword(email, password);
+
+    if (passwordUpdated) {
+      // Contraseña actualizada con éxito
+      res.status(200).json({
+        message:
+          'Contraseña actualizada con éxito. Puede iniciar sesión con su nueva contraseña.',
+      });
+    } else {
+      // Error al actualizar la contraseña
+      res.status(500).json({
+        message:
+          'Hubo un error al actualizar la contraseña. Por favor, inténtelo de nuevo más tarde.',
+      });
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

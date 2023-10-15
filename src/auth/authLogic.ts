@@ -39,10 +39,11 @@ export const login = async (
         lastname: user.lastname,
         email: user.email,
       };
+    } else {
+      throw new Error('Invalid password');
     }
-    throw new Error('Invalid password');
   } catch (err) {
-    throw err;
+    throw new Error('Login failed: ' + err);
   }
 };
 
@@ -183,6 +184,31 @@ export const updateUser = async (
       },
     });
     return userUpdated;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const forgotPassword = async (email: string, newPassword: string) => {
+  try {
+    const passwordHashed = await bcrypt.hash(newPassword, 10); // Aplicar hash de bcrypt a la nueva contraseña
+
+    console.log('Updating password for email:', email);
+    console.log('New password:', newPassword);
+
+    const passwordUpdated = await prisma().users.update({
+      where: {
+        email: email,
+      },
+      data: {
+        password: passwordHashed, // Usar la contraseña hasheada
+      },
+    });
+
+    console.log('Password updated successfully:', passwordUpdated);
+
+    return passwordUpdated;
   } catch (err) {
     console.log(err);
     throw err;

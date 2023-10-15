@@ -22,6 +22,7 @@ authRouter.post(
 authRouter.post('/refresh', authMiddleware, controllers.refreshController);
 
 authRouter.put('/update/:id', controllers.updateUserController);
+authRouter.put('/forgot-password', controllers.forgotPasswordController);
 
 authRouter.get(
   '/user/id/:id',
