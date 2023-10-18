@@ -21,7 +21,7 @@ app.use('/brand', brandsRouter);
 const server = app.listen(port, () => {
   createPrismaClient();
   getConfig();
-  console.log(`Server running on port ${port}!`);
+  console.log(`Server running on port ${port}`);
   console.log(`CORS-enabled web server listening on port ${port}`);
 });
 
