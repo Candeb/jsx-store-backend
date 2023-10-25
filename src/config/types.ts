@@ -5,4 +5,5 @@ export type loginResponse = {
   name: string;
   lastname: string | null;
   email: string;
+  role: string;
 };

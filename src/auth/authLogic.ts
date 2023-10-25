@@ -38,6 +38,7 @@ export const login = async (
         name: user.name,
         lastname: user.lastname,
         email: user.email,
+        role: user.role,
       };
     } else {
       throw new Error('Invalid password');
@@ -105,6 +106,7 @@ export const refreshToken = async (token: string): Promise<loginResponse> => {
         name: user.name,
         lastname: user.lastname,
         email: user.email,
+        role: user.role,
       };
     }
   } catch (err: any) {
