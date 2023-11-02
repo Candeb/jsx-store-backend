@@ -17,10 +17,10 @@ export const createBrand = async (name: string, picture: string) => {
 
 export const getAllBrands = async () => {
   try {
-    const brands = await prisma().brands.findMany({});
+    const brands = await prisma().brands.findMany();
     return brands;
   } catch (err) {
-    console.log(err);
+    console.error('Error in getAllBrands:', err);
     throw err;
   }
 };

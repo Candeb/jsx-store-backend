@@ -3,7 +3,6 @@ import {
   createBrand,
   deleteBrandById,
   getBrandById,
-  getAllBrands,
   getProductsByBrandId,
   getProductsByBrandName,
   updateBrand,
@@ -16,16 +15,6 @@ export const createBrandsController = async (req: Request, res: Response) => {
     const result = await createBrand(name, picture);
     res.json(result);
     return;
-  } catch (err) {
-    res.status(500).send(err);
-    return;
-  }
-};
-
-export const getAllBrandsController = async (req: Request, res: Response) => {
-  try {
-    const brands = await getAllBrands();
-    res.json(brands);
   } catch (err) {
     res.status(500).send(err);
     return;

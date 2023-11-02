@@ -24,12 +24,7 @@ brandsRouter.get(
   authAdminMiddleware,
   controllers.getBrandByIdController
 );
-brandsRouter.get(
-  '/allbrands',
-  authMiddleware,
-  authAdminMiddleware,
-  controllers.getAllBrandsController
-);
+
 brandsRouter.post(
   '/new',
   authMiddleware,
