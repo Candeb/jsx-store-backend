@@ -7,7 +7,7 @@ export const authAdminMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (res.locals.userId && res.locals.userId === 8) {
+  if (res.locals.role && res.locals.role === 'ADMIN') {
     next();
     return;
   }

@@ -24,6 +24,7 @@ export const authMiddleware = async (
     if (data) {
       res.locals.email = (data as any).email;
       res.locals.userId = (data as any).userId;
+      res.locals.role = (data as any).role;
       next();
     } else {
       res.status(401).json('No autorizado: el token no es válido');

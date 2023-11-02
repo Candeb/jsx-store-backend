@@ -17,7 +17,7 @@ brandsRouter.get(
   controllers.getProductsByBrandNameController
 );
 brandsRouter.get('/allbrands', controllers.getAllBrandsController);
-// brandsRouter.get('/brands/active', controllers.getActiveBrandsController);
+brandsRouter.get('/brands/active', controllers.getActiveBrandsController);
 
 // ADMIN
 brandsRouter.get(
@@ -28,7 +28,7 @@ brandsRouter.get(
 );
 brandsRouter.post(
   '/new',
-  // authMiddleware,
-  // authAdminMiddleware,
+  authMiddleware,
+  authAdminMiddleware,
   controllers.createBrandsController
 );
