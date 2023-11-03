@@ -5,9 +5,8 @@ import { authAdminMiddleware } from '../middlewares/authAdminMiddleware';
 
 export const orderRouter = Router();
 
-// orderRouter.use(authMiddleware);
-
 // logueados
+orderRouter.use(authMiddleware);
 orderRouter.post('/new', authMiddleware, controllers.createOrderController);
 orderRouter.get(
   '/active/user',
@@ -18,25 +17,25 @@ orderRouter.get(
 // ADMIN
 orderRouter.get(
   '/orders',
-  // authMiddleware,
-  // authAdminMiddleware,
+  authMiddleware,
+  authAdminMiddleware,
   controllers.getAllOrdersController
 );
 orderRouter.get(
   '/user/:id',
-  // authMiddleware,
-  // authAdminMiddleware,
+  authMiddleware,
+  authAdminMiddleware,
   controllers.getAllOrdersByUserIdController
 );
 orderRouter.get(
   '/:id',
-  // authMiddleware,
-  // authAdminMiddleware,
+  authMiddleware,
+  authAdminMiddleware,
   controllers.getOrderByIdController
 );
 orderRouter.delete(
   '/delete/:id',
-  // authMiddleware,
-  // authAdminMiddleware,
+  authMiddleware,
+  authAdminMiddleware,
   controllers.deleteOrderByIdController
 );
