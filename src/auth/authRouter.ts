@@ -12,23 +12,22 @@ authRouter.post(
   validators.registerValidator,
   controllers.registerController
 );
-
 authRouter.post(
   '/login',
   validators.loginValidator,
   controllers.loginController
 );
 
-authRouter.post('/refresh', authMiddleware, controllers.refreshController);
-
-authRouter.put('/update/:id', controllers.updateUserController);
 authRouter.put('/forgot-password', controllers.forgotPasswordController);
 
+// logueados
+authRouter.post('/refresh', authMiddleware, controllers.refreshController);
 authRouter.get(
   '/user/id/:id',
   authMiddleware,
   controllers.getUserByIdController
 );
+authRouter.put('/update/:id', authMiddleware, controllers.updateUserController);
 
 // ADMIN
 authRouter.get(
