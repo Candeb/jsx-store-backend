@@ -33,20 +33,20 @@ authRouter.get(
 // ADMIN
 authRouter.get(
   '/users',
-  // authMiddleware,
-  // authAdminMiddleware,
+  authMiddleware,
+  authAdminMiddleware,
   controllers.getAllUsersController
 );
 
 authRouter.delete(
   '/delete/email/:email',
-  // authMiddleware,
-  // authAdminMiddleware,
+  authMiddleware,
+  authAdminMiddleware,
   controllers.deleteUserByEmailController
 );
 authRouter.delete(
   '/delete/id/:id',
-  // authMiddleware,
-  // authAdminMiddleware,
+  authMiddleware,
+  authAdminMiddleware,
   controllers.deleteUserByUserIdController
 );
