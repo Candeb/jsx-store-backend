@@ -25,9 +25,6 @@ export const createOrder = async (userId: number, productsIds: number[]) => {
 export const getAllOrders = async () => {
   try {
     const orders = await prisma().orders.findMany({
-      where: {
-        deleted_at: null,
-      },
       include: {
         products: true,
       },
